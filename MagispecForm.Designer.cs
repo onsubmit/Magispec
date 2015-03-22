@@ -42,7 +42,7 @@
             this.checkBoxDefensive = new System.Windows.Forms.CheckBox();
             this.checkBoxArtisan = new System.Windows.Forms.CheckBox();
             this.checkBoxAggressive = new System.Windows.Forms.CheckBox();
-            this.buttonGo = new System.Windows.Forms.Button();
+            this.buttonSpec = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.listBoxDetails = new System.Windows.Forms.ListBox();
             this.labelMaxSeconds = new System.Windows.Forms.Label();
@@ -68,7 +68,7 @@
             this.groupBox1.Controls.Add(this.checkBoxAggressive);
             this.groupBox1.Location = new System.Drawing.Point(12, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(211, 178);
+            this.groupBox1.Size = new System.Drawing.Size(201, 166);
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Traits";
@@ -76,9 +76,10 @@
             // checkBoxWoodcutter
             // 
             this.checkBoxWoodcutter.AutoSize = true;
-            this.checkBoxWoodcutter.Location = new System.Drawing.Point(109, 140);
+            this.checkBoxWoodcutter.Location = new System.Drawing.Point(104, 140);
             this.checkBoxWoodcutter.Name = "checkBoxWoodcutter";
-            this.checkBoxWoodcutter.Size = new System.Drawing.Size(82, 17);
+            this.checkBoxWoodcutter.Padding = new System.Windows.Forms.Padding(1, 0, 0, 0);
+            this.checkBoxWoodcutter.Size = new System.Drawing.Size(83, 17);
             this.checkBoxWoodcutter.TabIndex = 11;
             this.checkBoxWoodcutter.Text = "Woodcutter";
             this.checkBoxWoodcutter.UseVisualStyleBackColor = true;
@@ -86,9 +87,10 @@
             // checkBoxPotionBrewer
             // 
             this.checkBoxPotionBrewer.AutoSize = true;
-            this.checkBoxPotionBrewer.Location = new System.Drawing.Point(109, 116);
+            this.checkBoxPotionBrewer.Location = new System.Drawing.Point(104, 116);
             this.checkBoxPotionBrewer.Name = "checkBoxPotionBrewer";
-            this.checkBoxPotionBrewer.Size = new System.Drawing.Size(92, 17);
+            this.checkBoxPotionBrewer.Padding = new System.Windows.Forms.Padding(1, 0, 0, 0);
+            this.checkBoxPotionBrewer.Size = new System.Drawing.Size(93, 17);
             this.checkBoxPotionBrewer.TabIndex = 10;
             this.checkBoxPotionBrewer.Text = "Potion Brewer";
             this.checkBoxPotionBrewer.UseVisualStyleBackColor = true;
@@ -96,9 +98,10 @@
             // checkBoxMiner
             // 
             this.checkBoxMiner.AutoSize = true;
-            this.checkBoxMiner.Location = new System.Drawing.Point(109, 92);
+            this.checkBoxMiner.Location = new System.Drawing.Point(104, 92);
             this.checkBoxMiner.Name = "checkBoxMiner";
-            this.checkBoxMiner.Size = new System.Drawing.Size(52, 17);
+            this.checkBoxMiner.Padding = new System.Windows.Forms.Padding(1, 0, 0, 0);
+            this.checkBoxMiner.Size = new System.Drawing.Size(53, 17);
             this.checkBoxMiner.TabIndex = 9;
             this.checkBoxMiner.Text = "Miner";
             this.checkBoxMiner.UseVisualStyleBackColor = true;
@@ -106,9 +109,10 @@
             // checkBoxLockmaster
             // 
             this.checkBoxLockmaster.AutoSize = true;
-            this.checkBoxLockmaster.Location = new System.Drawing.Point(109, 68);
+            this.checkBoxLockmaster.Location = new System.Drawing.Point(104, 68);
             this.checkBoxLockmaster.Name = "checkBoxLockmaster";
-            this.checkBoxLockmaster.Size = new System.Drawing.Size(81, 17);
+            this.checkBoxLockmaster.Padding = new System.Windows.Forms.Padding(1, 0, 0, 0);
+            this.checkBoxLockmaster.Size = new System.Drawing.Size(82, 17);
             this.checkBoxLockmaster.TabIndex = 8;
             this.checkBoxLockmaster.Text = "Lockmaster";
             this.checkBoxLockmaster.UseVisualStyleBackColor = true;
@@ -116,9 +120,10 @@
             // checkBoxGatherer
             // 
             this.checkBoxGatherer.AutoSize = true;
-            this.checkBoxGatherer.Location = new System.Drawing.Point(109, 44);
+            this.checkBoxGatherer.Location = new System.Drawing.Point(104, 44);
             this.checkBoxGatherer.Name = "checkBoxGatherer";
-            this.checkBoxGatherer.Size = new System.Drawing.Size(67, 17);
+            this.checkBoxGatherer.Padding = new System.Windows.Forms.Padding(1, 0, 0, 0);
+            this.checkBoxGatherer.Size = new System.Drawing.Size(68, 17);
             this.checkBoxGatherer.TabIndex = 7;
             this.checkBoxGatherer.Text = "Gatherer";
             this.checkBoxGatherer.UseVisualStyleBackColor = true;
@@ -126,9 +131,10 @@
             // checkBoxBigEater
             // 
             this.checkBoxBigEater.AutoSize = true;
-            this.checkBoxBigEater.Location = new System.Drawing.Point(109, 20);
+            this.checkBoxBigEater.Location = new System.Drawing.Point(104, 20);
             this.checkBoxBigEater.Name = "checkBoxBigEater";
-            this.checkBoxBigEater.Size = new System.Drawing.Size(69, 17);
+            this.checkBoxBigEater.Padding = new System.Windows.Forms.Padding(1, 0, 0, 0);
+            this.checkBoxBigEater.Size = new System.Drawing.Size(70, 17);
             this.checkBoxBigEater.TabIndex = 6;
             this.checkBoxBigEater.Text = "Big Eater";
             this.checkBoxBigEater.UseVisualStyleBackColor = true;
@@ -138,7 +144,8 @@
             this.checkBoxSwift.AutoSize = true;
             this.checkBoxSwift.Location = new System.Drawing.Point(7, 140);
             this.checkBoxSwift.Name = "checkBoxSwift";
-            this.checkBoxSwift.Size = new System.Drawing.Size(49, 17);
+            this.checkBoxSwift.Padding = new System.Windows.Forms.Padding(1, 0, 0, 0);
+            this.checkBoxSwift.Size = new System.Drawing.Size(50, 17);
             this.checkBoxSwift.TabIndex = 5;
             this.checkBoxSwift.Text = "Swift";
             this.checkBoxSwift.UseVisualStyleBackColor = true;
@@ -148,7 +155,8 @@
             this.checkBoxIntelligent.AutoSize = true;
             this.checkBoxIntelligent.Location = new System.Drawing.Point(7, 116);
             this.checkBoxIntelligent.Name = "checkBoxIntelligent";
-            this.checkBoxIntelligent.Size = new System.Drawing.Size(71, 17);
+            this.checkBoxIntelligent.Padding = new System.Windows.Forms.Padding(1, 0, 0, 0);
+            this.checkBoxIntelligent.Size = new System.Drawing.Size(72, 17);
             this.checkBoxIntelligent.TabIndex = 4;
             this.checkBoxIntelligent.Text = "Intelligent";
             this.checkBoxIntelligent.UseVisualStyleBackColor = true;
@@ -158,7 +166,8 @@
             this.checkBoxHealthy.AutoSize = true;
             this.checkBoxHealthy.Location = new System.Drawing.Point(7, 92);
             this.checkBoxHealthy.Name = "checkBoxHealthy";
-            this.checkBoxHealthy.Size = new System.Drawing.Size(62, 17);
+            this.checkBoxHealthy.Padding = new System.Windows.Forms.Padding(1, 0, 0, 0);
+            this.checkBoxHealthy.Size = new System.Drawing.Size(63, 17);
             this.checkBoxHealthy.TabIndex = 3;
             this.checkBoxHealthy.Text = "Healthy";
             this.checkBoxHealthy.UseVisualStyleBackColor = true;
@@ -168,7 +177,8 @@
             this.checkBoxDefensive.AutoSize = true;
             this.checkBoxDefensive.Location = new System.Drawing.Point(7, 68);
             this.checkBoxDefensive.Name = "checkBoxDefensive";
-            this.checkBoxDefensive.Size = new System.Drawing.Size(74, 17);
+            this.checkBoxDefensive.Padding = new System.Windows.Forms.Padding(1, 0, 0, 0);
+            this.checkBoxDefensive.Size = new System.Drawing.Size(75, 17);
             this.checkBoxDefensive.TabIndex = 2;
             this.checkBoxDefensive.Text = "Defensive";
             this.checkBoxDefensive.UseVisualStyleBackColor = true;
@@ -178,7 +188,8 @@
             this.checkBoxArtisan.AutoSize = true;
             this.checkBoxArtisan.Location = new System.Drawing.Point(7, 44);
             this.checkBoxArtisan.Name = "checkBoxArtisan";
-            this.checkBoxArtisan.Size = new System.Drawing.Size(58, 17);
+            this.checkBoxArtisan.Padding = new System.Windows.Forms.Padding(1, 0, 0, 0);
+            this.checkBoxArtisan.Size = new System.Drawing.Size(59, 17);
             this.checkBoxArtisan.TabIndex = 1;
             this.checkBoxArtisan.Text = "Artisan";
             this.checkBoxArtisan.UseVisualStyleBackColor = true;
@@ -186,55 +197,60 @@
             // checkBoxAggressive
             // 
             this.checkBoxAggressive.AutoSize = true;
+            this.checkBoxAggressive.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.checkBoxAggressive.Location = new System.Drawing.Point(7, 20);
             this.checkBoxAggressive.Name = "checkBoxAggressive";
-            this.checkBoxAggressive.Size = new System.Drawing.Size(78, 17);
+            this.checkBoxAggressive.Padding = new System.Windows.Forms.Padding(1, 0, 0, 0);
+            this.checkBoxAggressive.Size = new System.Drawing.Size(79, 17);
             this.checkBoxAggressive.TabIndex = 0;
             this.checkBoxAggressive.Text = "Aggressive";
             this.checkBoxAggressive.UseVisualStyleBackColor = true;
             // 
             // buttonGo
             // 
-            this.buttonGo.Location = new System.Drawing.Point(131, 196);
-            this.buttonGo.Name = "buttonGo";
-            this.buttonGo.Size = new System.Drawing.Size(92, 23);
-            this.buttonGo.TabIndex = 2;
-            this.buttonGo.Text = "Spec!";
-            this.buttonGo.UseVisualStyleBackColor = true;
-            this.buttonGo.Click += new System.EventHandler(this.ButtonSpec_Click);
+            this.buttonSpec.Enabled = false;
+            this.buttonSpec.Location = new System.Drawing.Point(134, 186);
+            this.buttonSpec.Name = "buttonGo";
+            this.buttonSpec.Size = new System.Drawing.Size(79, 23);
+            this.buttonSpec.TabIndex = 2;
+            this.buttonSpec.Text = "Spec!";
+            this.buttonSpec.UseVisualStyleBackColor = true;
+            this.buttonSpec.Click += new System.EventHandler(this.ButtonSpec_Click);
             // 
             // groupBox2
             // 
             this.groupBox2.Controls.Add(this.listBoxDetails);
-            this.groupBox2.Location = new System.Drawing.Point(12, 225);
+            this.groupBox2.Location = new System.Drawing.Point(12, 213);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(211, 140);
+            this.groupBox2.Size = new System.Drawing.Size(201, 152);
             this.groupBox2.TabIndex = 3;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Details";
             // 
             // listBoxDetails
             // 
+            this.listBoxDetails.BackColor = System.Drawing.SystemColors.Control;
+            this.listBoxDetails.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.listBoxDetails.Dock = System.Windows.Forms.DockStyle.Fill;
             this.listBoxDetails.Enabled = false;
             this.listBoxDetails.FormattingEnabled = true;
             this.listBoxDetails.Location = new System.Drawing.Point(3, 16);
             this.listBoxDetails.Name = "listBoxDetails";
-            this.listBoxDetails.Size = new System.Drawing.Size(205, 121);
+            this.listBoxDetails.Size = new System.Drawing.Size(195, 133);
             this.listBoxDetails.TabIndex = 0;
             // 
             // labelMaxSeconds
             // 
             this.labelMaxSeconds.AutoSize = true;
-            this.labelMaxSeconds.Location = new System.Drawing.Point(16, 201);
+            this.labelMaxSeconds.Location = new System.Drawing.Point(16, 189);
             this.labelMaxSeconds.Name = "labelMaxSeconds";
             this.labelMaxSeconds.Size = new System.Drawing.Size(73, 13);
             this.labelMaxSeconds.TabIndex = 4;
             this.labelMaxSeconds.Text = "Max seconds:";
             // 
-            // numericUpDown1
+            // numericUpDownMaxSeconds
             // 
-            this.numericUpDownMaxSeconds.Location = new System.Drawing.Point(92, 199);
+            this.numericUpDownMaxSeconds.Location = new System.Drawing.Point(95, 187);
             this.numericUpDownMaxSeconds.Maximum = new decimal(new int[] {
             30,
             0,
@@ -245,7 +261,7 @@
             0,
             0,
             -2147483648});
-            this.numericUpDownMaxSeconds.Name = "numericUpDown1";
+            this.numericUpDownMaxSeconds.Name = "numericUpDownMaxSeconds";
             this.numericUpDownMaxSeconds.Size = new System.Drawing.Size(33, 20);
             this.numericUpDownMaxSeconds.TabIndex = 5;
             this.numericUpDownMaxSeconds.Value = new decimal(new int[] {
@@ -258,11 +274,11 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(235, 378);
+            this.ClientSize = new System.Drawing.Size(225, 378);
             this.Controls.Add(this.numericUpDownMaxSeconds);
             this.Controls.Add(this.labelMaxSeconds);
             this.Controls.Add(this.groupBox2);
-            this.Controls.Add(this.buttonGo);
+            this.Controls.Add(this.buttonSpec);
             this.Controls.Add(this.groupBox1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -294,7 +310,7 @@
         private System.Windows.Forms.CheckBox checkBoxDefensive;
         private System.Windows.Forms.CheckBox checkBoxArtisan;
         private System.Windows.Forms.CheckBox checkBoxAggressive;
-        private System.Windows.Forms.Button buttonGo;
+        private System.Windows.Forms.Button buttonSpec;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.ListBox listBoxDetails;
         private System.Windows.Forms.Label labelMaxSeconds;

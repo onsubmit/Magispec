@@ -26,8 +26,8 @@ namespace Magispec
             Image newImage = new Bitmap(width, height);
             using (Graphics g = Graphics.FromImage(newImage))
             {
-                g.SmoothingMode = SmoothingMode.HighQuality;
-                g.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                g.SmoothingMode = SmoothingMode.None;
+                g.InterpolationMode = InterpolationMode.NearestNeighbor;
                 g.PixelOffsetMode = PixelOffsetMode.HighQuality;
                 g.DrawImage(original, 0, 0, width, height);
             }
@@ -43,7 +43,11 @@ namespace Magispec
         /// <returns>A number close to 100 if similar</returns>
         public static double CompareTo(this Color a, Color b)
         {
-            return 100.0 * (1.0 - ((double)(Math.Abs(a.R - b.R) + Math.Abs(a.G - b.G) + Math.Abs(a.B - b.B)) / (765.0))); // 255 * 3
+            var diffR = Math.Abs(a.R - b.R);
+            var diffG = Math.Abs(a.G - b.G);
+            var diffB = Math.Abs(a.B - b.B);
+
+            return Math.Max(Math.Max(diffR, diffG), diffB);
         }
     }
 }

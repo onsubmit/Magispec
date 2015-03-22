@@ -19,22 +19,22 @@ namespace Magispec
     public partial class MagispecForm : Form
     {
         /// <summary>
-        /// Map between each trait and its icon
+        /// Map between each trait and its background color
         /// </summary>
-        private static readonly Dictionary<Trait, Bitmap> TraitImages = new Dictionary<Trait, Bitmap>()
+        private static readonly Dictionary<Trait, Color> TraitColors = new Dictionary<Trait, Color>()
         {
-            { Trait.Agressive, Properties.Resources.Agressive },
-            { Trait.Artisan, Properties.Resources.Artisan },
-            { Trait.BigEater, Properties.Resources.BigEater },
-            { Trait.Defensive, Properties.Resources.Defensive },
-            { Trait.Gatherer, Properties.Resources.Gatherer },
-            { Trait.Healthy, Properties.Resources.Healthy },
-            { Trait.Intellect, Properties.Resources.Intellect },
-            { Trait.Lockmaster, Properties.Resources.Lockmaster },
-            { Trait.Miner, Properties.Resources.Miner },
-            { Trait.PotionBrewer, Properties.Resources.PotionBrewer },
-            { Trait.Swift, Properties.Resources.Swift },
-            { Trait.Woodcutter, Properties.Resources.Woodcutter }
+            { Trait.Agressive, Color.FromArgb(157, 39, 42) },
+            { Trait.Artisan, Color.FromArgb(150, 62, 40) },
+            { Trait.BigEater, Color.FromArgb(127, 67, 39) },
+            { Trait.Defensive, Color.FromArgb(49, 106, 158) },
+            { Trait.Gatherer, Color.FromArgb(86, 121, 67) },
+            { Trait.Healthy, Color.FromArgb(234, 37, 118) },
+            { Trait.Intellect, Color.FromArgb(136, 54, 170) },
+            { Trait.Lockmaster, Color.FromArgb(118, 119, 117) },
+            { Trait.Miner, Color.FromArgb(90, 88, 92) },
+            { Trait.PotionBrewer, Color.FromArgb(108, 31, 153) },
+            { Trait.Swift, Color.FromArgb(35, 152, 73) },
+            { Trait.Woodcutter, Color.FromArgb(126, 82, 63) }
         };
 
         /// <summary>
@@ -104,6 +104,11 @@ namespace Magispec
         /// The registry key value which knows the window resolution width
         /// </summary>
         private string resolutionWidthValue;
+
+        /// <summary>
+        /// List of the checkboxes
+        /// </summary>
+        private CheckBox[] checkboxes;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MagispecForm" /> class.
@@ -303,7 +308,7 @@ namespace Magispec
                 var processes = Process.GetProcessesByName("magicite");
                 if (processes.Length == 0)
                 {
-                    var result = MessageBox.Show("Open Magicite first please.", "Error", MessageBoxButtons.RetryCancel, MessageBoxIcon.Error);
+                    var result = MessageBox.Show("Please open Magicite to the trait selection screen.", "Error", MessageBoxButtons.RetryCancel, MessageBoxIcon.Error);
                     if (result == DialogResult.Cancel)
                     {
                         return null;
@@ -379,6 +384,36 @@ namespace Magispec
             checkBoxPotionBrewer.Tag = Trait.PotionBrewer;
             checkBoxSwift.Tag = Trait.Swift;
             checkBoxWoodcutter.Tag = Trait.Woodcutter;
+
+            this.checkboxes = new[]
+            {
+                checkBoxAggressive,
+                checkBoxArtisan,
+                checkBoxBigEater,
+                checkBoxDefensive,
+                checkBoxGatherer,
+                checkBoxHealthy,
+                checkBoxIntelligent,
+                checkBoxLockmaster,
+                checkBoxMiner,
+                checkBoxPotionBrewer,
+                checkBoxSwift,
+                checkBoxWoodcutter
+            };
+
+            foreach (var checkbox in checkboxes)
+            {
+                checkbox.ForeColor = TraitColors[(Trait)checkbox.Tag];
+                checkbox.CheckedChanged += (checkedSender, checkedEventArgs) =>
+                {
+                    int numChecked = checkboxes.Count(c => c.Checked);
+                    buttonSpec.Enabled = numChecked > 0;
+                    foreach (var c in checkboxes)
+                    {
+                        c.Enabled = c.Checked || numChecked < 2;
+                    }
+                };
+            }
         }
 
         /// <summary>
@@ -426,38 +461,38 @@ namespace Magispec
                 Trait trait2 = Trait.Unknown;
                 Color background1 = GetIconBackgroundColor(Trait1IconPosition[ResolutionString], windowRect);
                 Color background2 = GetIconBackgroundColor(Trait2IconPosition[ResolutionString], windowRect);
-                foreach (var kvp in TraitImages)
+                foreach (var kvp in TraitColors)
                 {
                     double similarity = 100;
-                    Color traitBackround = kvp.Value.GetPixel(5, 20);
+                    Color traitBackround = kvp.Value;
 
-                    if (desiredTrait1 != Trait.Unknown && trait1 == Trait.Unknown)
+                    if (trait1 == Trait.Unknown)
                     {
                         similarity = background1.CompareTo(traitBackround);
-                        if (similarity > 98)
+                        if (similarity < 11)
                         {
                             trait1 = kvp.Key;
                         }
                     }
 
-                    if (desiredTrait2 != Trait.Unknown && trait2 == Trait.Unknown)
+                    if (trait2 == Trait.Unknown)
                     {
                         similarity = background2.CompareTo(traitBackround);
-                        if (similarity > 98)
+                        if (similarity < 11)
                         {
                             trait2 = kvp.Key;
                         }
                     }
 
-                    if ((desiredTrait1 == Trait.Unknown || trait1 != Trait.Unknown) &&
-                        (desiredTrait2 == Trait.Unknown || trait2 != Trait.Unknown))
+                    if (((desiredTrait1 == Trait.Unknown || trait1 == desiredTrait1) && (desiredTrait2 == Trait.Unknown || trait2 == desiredTrait2)) ||
+                        ((desiredTrait2 == Trait.Unknown || trait1 == desiredTrait2) && (desiredTrait1 == Trait.Unknown || trait2 == desiredTrait1)))
                     {
                         break;
                     }
                 }
 
-                return (trait1 == desiredTrait1 && trait2 == desiredTrait2) ||
-                       (trait1 == desiredTrait2 && trait2 == desiredTrait1);
+                return ((desiredTrait1 == Trait.Unknown || trait1 == desiredTrait1) && (desiredTrait2 == Trait.Unknown || trait2 == desiredTrait2)) ||
+                       ((desiredTrait2 == Trait.Unknown || trait1 == desiredTrait2) && (desiredTrait1 == Trait.Unknown || trait2 == desiredTrait1));
             });
 
             this.ClickMouse(Cursor.Position.X, Cursor.Position.Y, stopCondition: stopCondition);
@@ -474,7 +509,6 @@ namespace Magispec
             Bitmap bitmap = new Bitmap(iconRect.Width, iconRect.Height);
             using (Graphics g = Graphics.FromImage(bitmap))
             {
-                g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
                 g.CopyFromScreen(windowRect.Left + iconRect.Left, windowRect.Top + iconRect.Top, 0, 0, iconRect.Size);
             }
 
@@ -489,22 +523,6 @@ namespace Magispec
         /// <param name="desiredTrait2">Second desired trait</param>
         private void GetDesiredTraits(ref Trait desiredTrait1, ref Trait desiredTrait2)
         {
-            CheckBox[] checkboxes = new[]
-            {
-                checkBoxAggressive,
-                checkBoxArtisan,
-                checkBoxBigEater,
-                checkBoxDefensive,
-                checkBoxGatherer,
-                checkBoxHealthy,
-                checkBoxIntelligent,
-                checkBoxLockmaster,
-                checkBoxMiner,
-                checkBoxPotionBrewer,
-                checkBoxSwift,
-                checkBoxWoodcutter
-            };
-
             foreach (var checkbox in checkboxes)
             {
                 if (checkbox.Checked)
