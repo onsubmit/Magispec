@@ -1,0 +1,8 @@
+<StyleCopSettings Version="105">
+  <GlobalSettings>
+    <CollectionProperty Name="RecognizedWords">
+      <Value>Magicite</Value>
+      <Value>Magispec</Value>
+    </CollectionProperty>
+  </GlobalSettings>
+</StyleCopSettings>
