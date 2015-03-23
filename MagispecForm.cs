@@ -7,6 +7,7 @@ namespace Magispec
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel;
     using System.Diagnostics;
     using System.Drawing;
     using System.Linq;
@@ -26,7 +27,7 @@ namespace Magispec
             { Trait.Agressive, Color.FromArgb(157, 39, 42) },
             { Trait.Artisan, Color.FromArgb(150, 62, 40) },
             { Trait.BigEater, Color.FromArgb(127, 67, 39) },
-            { Trait.Defensive, Color.FromArgb(49, 106, 158) },
+            { Trait.Defensive, Color.FromArgb(36, 99, 150) },
             { Trait.Gatherer, Color.FromArgb(86, 121, 67) },
             { Trait.Healthy, Color.FromArgb(234, 37, 118) },
             { Trait.Intellect, Color.FromArgb(136, 54, 170) },
@@ -469,6 +470,7 @@ namespace Magispec
             Win32.ShowWindow(p.MainWindowHandle, Win32.SW_RESTORE);
             Win32.SetForegroundWindow(p.MainWindowHandle);
 
+            tabControl.SelectedIndex = 2;
             buttonSpec.Enabled = false;
             this.ClickStatsButton(p);
         }
@@ -487,55 +489,111 @@ namespace Magispec
             Rectangle statsButtonRect = this.GetStatsButtonPosition(windowRect);
             this.MoveMouse(windowRect, statsButtonRect);
 
-            Func<bool> stopCondition = new Func<bool>(() =>
-            {
-                if (desiredTrait1 == Trait.Unknown && desiredTrait2 == Trait.Unknown)
-                {
-                    return true;
-                }
-
-                Trait trait1 = Trait.Unknown;
-                Trait trait2 = Trait.Unknown;
-                Color background1 = GetIconBackgroundColor(GetTrait1IconPosition(windowRect), windowRect);
-                Color background2 = GetIconBackgroundColor(GetTrait2IconPosition(windowRect), windowRect);
-                foreach (var kvp in TraitColors)
-                {
-                    double similarity = 100;
-                    Color traitBackround = kvp.Value;
-
-                    if (trait1 == Trait.Unknown)
-                    {
-                        similarity = background1.CompareTo(traitBackround);
-                        if (similarity < 11)
-                        {
-                            trait1 = kvp.Key;
-                        }
-                    }
-
-                    if (trait2 == Trait.Unknown)
-                    {
-                        similarity = background2.CompareTo(traitBackround);
-                        if (similarity < 11)
-                        {
-                            trait2 = kvp.Key;
-                        }
-                    }
-
-                    if (((desiredTrait1 == Trait.Unknown || trait1 == desiredTrait1) && (desiredTrait2 == Trait.Unknown || trait2 == desiredTrait2)) ||
-                        ((desiredTrait2 == Trait.Unknown || trait1 == desiredTrait2) && (desiredTrait1 == Trait.Unknown || trait2 == desiredTrait1)))
-                    {
-                        break;
-                    }
-                }
-
-                return ((desiredTrait1 == Trait.Unknown || trait1 == desiredTrait1) && (desiredTrait2 == Trait.Unknown || trait2 == desiredTrait2)) ||
-                       ((desiredTrait2 == Trait.Unknown || trait1 == desiredTrait2) && (desiredTrait1 == Trait.Unknown || trait2 == desiredTrait1));
-            });
-
             int x = windowRect.Left + statsButtonRect.Left + ((statsButtonRect.Right - statsButtonRect.Left) / 2);
             int y = windowRect.Top + statsButtonRect.Top + ((statsButtonRect.Bottom - statsButtonRect.Top) / 2);
-            this.ClickMouse(x, y, stopCondition: stopCondition);
-            buttonSpec.Enabled = true;
+
+            BackgroundWorker bw = new BackgroundWorker() { WorkerReportsProgress = true };
+            bw.DoWork += (bwSender, bwArgs) =>
+            {
+                double maxSeconds = (double)numericUpDownMaxSeconds.Value;
+                bool timeLimited = maxSeconds > 0;
+                DateTime endTime = DateTime.Now.AddSeconds(maxSeconds);
+
+                int count = 0;
+                while (!timeLimited || DateTime.Now < endTime)
+                {
+                    if (desiredTrait1 == Trait.Unknown && desiredTrait2 == Trait.Unknown)
+                    {
+                        return;
+                    }
+
+                    Trait trait1 = Trait.Unknown;
+                    Trait trait2 = Trait.Unknown;
+
+                    Bitmap bitmap1 = GetIcon(GetTrait1IconPosition(windowRect), windowRect);
+                    Color background1 = bitmap1.GetPixel(5, 20);
+
+                    Bitmap bitmap2 = GetIcon(GetTrait2IconPosition(windowRect), windowRect);
+                    Color background2 = bitmap2.GetPixel(5, 20);
+
+                    foreach (var kvp in TraitColors)
+                    {
+                        double similarity = 100;
+                        Color traitBackround = kvp.Value;
+
+                        if (trait1 == Trait.Unknown)
+                        {
+                            similarity = background1.CompareTo(traitBackround);
+                            if (similarity < 11)
+                            {
+                                trait1 = kvp.Key;
+                            }
+                        }
+
+                        if (trait2 == Trait.Unknown)
+                        {
+                            similarity = background2.CompareTo(traitBackround);
+                            if (similarity < 11)
+                            {
+                                trait2 = kvp.Key;
+                            }
+                        }
+
+                        if (((desiredTrait1 == Trait.Unknown || trait1 == desiredTrait1) && (desiredTrait2 == Trait.Unknown || trait2 == desiredTrait2)) ||
+                            ((desiredTrait2 == Trait.Unknown || trait1 == desiredTrait2) && (desiredTrait1 == Trait.Unknown || trait2 == desiredTrait1)))
+                        {
+                            string returnDescription = string.Format("{0}{1}{2}", trait1, Environment.NewLine, trait2);
+                            bw.ReportProgress(count++, new Tuple<Bitmap, Bitmap, string>(bitmap1, bitmap2, returnDescription));
+                            return;
+                        }
+                    }
+
+                    string description = string.Format("{0}{1}{2}", trait1, Environment.NewLine, trait2);
+                    bw.ReportProgress(count++, new Tuple<Bitmap, Bitmap, string>(bitmap1, bitmap2, description));
+
+                    System.Threading.Thread.Sleep(1);
+                    Win32.mouse_event(Win32.MOUSEEVENTF_LEFTDOWN | Win32.MOUSEEVENTF_LEFTUP, (uint)x, (uint)y, 0, 0);
+                }
+            };
+
+            bw.ProgressChanged += (bwSender, bwArgs) =>
+            {
+                int row = bwArgs.ProgressPercentage;
+                Tuple<Bitmap, Bitmap, string> bitmaps = bwArgs.UserState as Tuple<Bitmap, Bitmap, string>;
+
+                PictureBox a = new PictureBox()
+                {
+                    Image = bitmaps.Item1,
+                    Location = new System.Drawing.Point(9, 4 + (56 * row)),
+                    Size = new System.Drawing.Size(50, 50)
+                };
+
+                PictureBox b = new PictureBox()
+                {
+                    Image = bitmaps.Item2,
+                    Location = new System.Drawing.Point(65, 4 + (56 * row)),
+                    Size = new System.Drawing.Size(50, 50)
+                };
+
+                Label label = new Label()
+                {
+                    Location = new System.Drawing.Point(120, 4 + (56 * row)),
+                    Text = bitmaps.Item3,
+                    AutoSize = true
+                };
+
+                this.tabPage3.Controls.Add(a);
+                this.tabPage3.Controls.Add(b);
+                this.tabPage3.Controls.Add(label);
+            };
+
+            bw.RunWorkerCompleted += (bwSender, bwArgs) =>
+            {
+                buttonSpec.Enabled = true;
+            };
+
+            this.tabPage3.Controls.Clear();
+            bw.RunWorkerAsync();
         }
 
         /// <summary>
@@ -646,7 +704,7 @@ namespace Magispec
         /// <param name="iconRect">Trait rectangle</param>
         /// <param name="windowRect">Window rectangle</param>
         /// <returns>Background color</returns>
-        private Color GetIconBackgroundColor(Rectangle iconRect, Rectangle windowRect)
+        private Bitmap GetIcon(Rectangle iconRect, Rectangle windowRect)
         {
             Bitmap bitmap = new Bitmap(iconRect.Width, iconRect.Height);
             using (Graphics g = Graphics.FromImage(bitmap))
@@ -655,7 +713,7 @@ namespace Magispec
             }
 
             bitmap = (Bitmap)bitmap.Resize(50, 50);
-            return bitmap.GetPixel(5, 20);
+            return bitmap;
         }
 
         /// <summary>
@@ -692,24 +750,6 @@ namespace Magispec
             int x = windowRect.Left + rect.Left + ((rect.Right - rect.Left) / 2);
             int y = windowRect.Top + rect.Top + ((rect.Bottom - rect.Top) / 2);
             Cursor.Position = new Point(x, y);
-        }
-
-        /// <summary>
-        /// Clicks the mouse repeatedly at the desired location until the given condition is met 
-        /// </summary>
-        /// <param name="x">X coordinate</param>
-        /// <param name="y">Y coordinate</param>
-        /// <param name="stopCondition">Stopping condition</param>
-        private void ClickMouse(int x, int y, Func<bool> stopCondition)
-        {
-            double maxSeconds = (double)numericUpDownMaxSeconds.Value;
-            bool timeLimited = maxSeconds > 0;
-            DateTime endTime = DateTime.Now.AddSeconds(maxSeconds);
-            while (!stopCondition.Invoke() && (!timeLimited || DateTime.Now < endTime))
-            {
-                System.Threading.Thread.Sleep(1);
-                Win32.mouse_event(Win32.MOUSEEVENTF_LEFTDOWN | Win32.MOUSEEVENTF_LEFTUP, (uint)x, (uint)y, 0, 0);
-            }
         }
     }
 }
