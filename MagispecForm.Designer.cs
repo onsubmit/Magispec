@@ -206,11 +206,11 @@
             this.checkBoxAggressive.Text = "Aggressive";
             this.checkBoxAggressive.UseVisualStyleBackColor = true;
             // 
-            // buttonGo
+            // buttonSpec
             // 
             this.buttonSpec.Enabled = false;
             this.buttonSpec.Location = new System.Drawing.Point(134, 186);
-            this.buttonSpec.Name = "buttonGo";
+            this.buttonSpec.Name = "buttonSpec";
             this.buttonSpec.Size = new System.Drawing.Size(79, 23);
             this.buttonSpec.TabIndex = 2;
             this.buttonSpec.Text = "Spec!";
@@ -250,7 +250,7 @@
             // 
             // numericUpDownMaxSeconds
             // 
-            this.numericUpDownMaxSeconds.Location = new System.Drawing.Point(95, 187);
+            this.numericUpDownMaxSeconds.Location = new System.Drawing.Point(88, 187);
             this.numericUpDownMaxSeconds.Maximum = new decimal(new int[] {
             30,
             0,
@@ -284,7 +284,6 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "MagispecForm";
             this.Text = "Magispec 1.0";
-            this.TopMost = true;
             this.Load += new System.EventHandler(this.MagispecForm_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();

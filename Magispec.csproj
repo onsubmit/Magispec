@@ -48,7 +48,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Extensions.cs" />
-    <Compile Include="ShowWindowCommands.cs" />
     <Compile Include="Trait.cs" />
     <Compile Include="Win32.cs" />
     <Compile Include="MagispecForm.cs">

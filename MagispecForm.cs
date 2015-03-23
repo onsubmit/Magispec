@@ -429,8 +429,10 @@ namespace Magispec
                 return;
             }
 
-            Win32.ShowWindow(p.MainWindowHandle, ShowWindowCommands.Restore);
+            Win32.ShowWindow(p.MainWindowHandle, Win32.SW_RESTORE);
             Win32.SetForegroundWindow(p.MainWindowHandle);
+
+            buttonSpec.Enabled = false;
             this.ClickStatsButton(p);
         }
 
@@ -440,7 +442,6 @@ namespace Magispec
         /// <param name="p">Magicite process</param>
         private void ClickStatsButton(Process p)
         {
-            this.TopMost = false;
             Trait desiredTrait1 = Trait.Unknown;
             Trait desiredTrait2 = Trait.Unknown;
             this.GetDesiredTraits(ref desiredTrait1, ref desiredTrait2);
@@ -497,6 +498,7 @@ namespace Magispec
             int x = windowRect.Left + statsButtonRect.Left + ((statsButtonRect.Right - statsButtonRect.Left) / 2);
             int y = windowRect.Top + statsButtonRect.Top + ((statsButtonRect.Bottom - statsButtonRect.Top) / 2);
             this.ClickMouse(x, y, stopCondition: stopCondition);
+            buttonSpec.Enabled = true;
         }
 
         /// <summary>

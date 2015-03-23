@@ -16,6 +16,7 @@ namespace Magispec
     {
         public const uint MOUSEEVENTF_LEFTDOWN = 0x02;
         public const uint MOUSEEVENTF_LEFTUP = 0x04;
+        public const int SW_RESTORE = 9;
 
         [DllImport("user32.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.StdCall)]
         public static extern void mouse_event(uint dwFlags, uint dx, uint dy, uint cButtons, uint dwExtraInfo);
@@ -32,6 +33,6 @@ namespace Magispec
 
         [DllImport("user32.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]
-        public static extern bool ShowWindow(IntPtr hWnd, ShowWindowCommands nCmdShow);
+        public static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
     }
 }
