@@ -81,6 +81,11 @@ namespace Magispec
         private static readonly Dictionary<string, Rectangle> Trait2IconPosition = BuildTrait2IconPositions();
 
         /// <summary>
+        /// Timer that checks for changes to the Magicite window
+        /// </summary>
+        private static Timer timer;
+
+        /// <summary>
         /// The Magicite registry key
         /// </summary>
         private RegistryKey regKey;
@@ -116,6 +121,39 @@ namespace Magispec
         public MagispecForm()
         {
             this.InitializeComponent();
+        }
+
+        /// <summary>
+        /// Gets the timer that checks for changes to the Magicite window
+        /// </summary>
+        private Timer Timer
+        {
+            get
+            {
+                if (timer == null)
+                {
+                    timer = new Timer() { Interval = 100 };
+                    timer.Tick += (tickSender, tickEventArgs) =>
+                    {
+                        var p = this.GetMagiciteProcess();
+                        if (p == null)
+                        {
+                            timer.Stop();
+                            var result = MessageBox.Show(this, "Please open Magicite to the trait selection screen.", "Error", MessageBoxButtons.RetryCancel, MessageBoxIcon.Error);
+                            if (result == DialogResult.Retry)
+                            {
+                                timer.Start();
+                            }
+                        }
+                        else
+                        {
+                            UpdateDetails(p);
+                        }
+                    };
+                }
+
+                return timer;
+            }
         }
 
         /// <summary>
@@ -308,11 +346,7 @@ namespace Magispec
                 var processes = Process.GetProcessesByName("magicite");
                 if (processes.Length == 0)
                 {
-                    var result = MessageBox.Show("Please open Magicite to the trait selection screen.", "Error", MessageBoxButtons.RetryCancel, MessageBoxIcon.Error);
-                    if (result == DialogResult.Cancel)
-                    {
-                        return null;
-                    }
+                    return null;
                 }
                 else
                 {
@@ -357,19 +391,9 @@ namespace Magispec
         private void MagispecForm_Load(object sender, EventArgs e)
         {
             var p = this.GetMagiciteProcess();
-            if (p != null)
+            if (!Timer.Enabled)
             {
-                Timer t = new Timer() { Interval = 100 };
-                t.Tick += (tickSender, tickEventArgs) =>
-                {
-                    p = GetMagiciteProcess();
-                    if (p != null)
-                    {
-                        UpdateDetails(p);
-                    }
-                };
-
-                t.Start();
+                Timer.Start();
             }
 
             checkBoxAggressive.Tag = Trait.Agressive;
@@ -424,9 +448,22 @@ namespace Magispec
         private void ButtonSpec_Click(object sender, EventArgs e)
         {
             var p = this.GetMagiciteProcess();
-            if (p == null)
+            while (p == null)
             {
-                return;
+                var result = MessageBox.Show(this, "Please open Magicite to the trait selection screen.", "Error", MessageBoxButtons.RetryCancel, MessageBoxIcon.Error);
+                if (result == DialogResult.Retry)
+                {
+                    p = this.GetMagiciteProcess();
+                }
+                else
+                {
+                    return;
+                }
+            }
+
+            if (!Timer.Enabled)
+            {
+                Timer.Start();
             }
 
             Win32.ShowWindow(p.MainWindowHandle, Win32.SW_RESTORE);
