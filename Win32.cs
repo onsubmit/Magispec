@@ -24,6 +24,9 @@ namespace Magispec
         public static extern long GetWindowRect(IntPtr hWnd, ref Rectangle rectangle);
 
         [DllImport("user32.dll")]
+        public static extern bool GetClientRect(IntPtr hWnd, ref Rectangle rectangle);
+
+        [DllImport("user32.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool SetForegroundWindow(IntPtr hWnd);
 

@@ -42,18 +42,18 @@ namespace Magispec
         /// </summary>
         private static readonly Dictionary<string, Rectangle> StatsButtonPosition = new Dictionary<string, Rectangle>()
         {
-            { "640x480", new Rectangle(437, 152, 104, 29) },
-            { "800x600", new Rectangle(546, 284, 129, 36) },
-            { "1024x768", new Rectangle(698, 229, 165, 46) },
-            { "1152x864", new Rectangle(784, 255, 187, 51) },
-            { "1280x720", new Rectangle(850, 181, 187, 52) },
-            { "1280x960", new Rectangle(871, 280, 207, 57) },
-            { "1280x1024", new Rectangle(875, 309, 211, 57) },
-            { "1366x768", new Rectangle(907, 192, 199, 55) },
-            { "1400x1050", new Rectangle(952, 304, 227, 63) },
-            { "1600x900", new Rectangle(1061, 221, 235, 64) },
-            { "1600x1024", new Rectangle(1074, 270, 246, 68) },
-            { "1920x1080", new Rectangle(1273, 260, 281, 77) }
+            { "640x480", new Rectangle(434, 127, 104, 29) },
+            { "800x600", new Rectangle(543, 159, 129, 36) },
+            { "1024x768", new Rectangle(695, 204, 165, 46) },
+            { "1152x864", new Rectangle(781, 230, 187, 51) },
+            { "1280x720", new Rectangle(847, 156, 187, 52) },
+            { "1280x960", new Rectangle(868, 255, 207, 57) },
+            { "1280x1024", new Rectangle(872, 284, 211, 57) },
+            { "1366x768", new Rectangle(904, 167, 199, 55) },
+            { "1400x1050", new Rectangle(949, 279, 227, 63) },
+            { "1600x900", new Rectangle(1058, 196, 235, 64) },
+            { "1600x1024", new Rectangle(1071, 245, 246, 68) },
+            { "1920x1080", new Rectangle(1270, 235, 281, 77) }
         };
 
         /// <summary>
@@ -61,18 +61,18 @@ namespace Magispec
         /// </summary>
         private static readonly Dictionary<string, Rectangle> Trait1IconPosition = new Dictionary<string, Rectangle>()
         {
-            { "640x480", new Rectangle(439, 288, 50, 50) },
-            { "800x600", new Rectangle(548, 354, 62, 62) },
-            { "1024x768", new Rectangle(701, 446, 80, 80) },
-            { "1152x864", new Rectangle(788, 499, 90, 90) },
-            { "1280x720", new Rectangle(853, 427, 90, 90) },
-            { "1280x960", new Rectangle(875, 552, 99, 99) },
-            { "1280x1024", new Rectangle(879, 585, 101, 101) },
-            { "1366x768", new Rectangle(910, 454, 96, 96) },
-            { "1400x1050", new Rectangle(957, 601, 109, 109) },
-            { "1600x900", new Rectangle(1066, 528, 113, 113) },
-            { "1600x1024", new Rectangle(1079, 593, 118, 118) },
-            { "1920x1080", new Rectangle(1278, 629, 135, 135) }
+            { "640x480", new Rectangle(436, 263, 50, 50) },
+            { "800x600", new Rectangle(545, 329, 62, 62) },
+            { "1024x768", new Rectangle(698, 421, 80, 80) },
+            { "1152x864", new Rectangle(785, 474, 90, 90) },
+            { "1280x720", new Rectangle(850, 402, 90, 90) },
+            { "1280x960", new Rectangle(872, 527, 99, 99) },
+            { "1280x1024", new Rectangle(876, 560, 101, 101) },
+            { "1366x768", new Rectangle(907, 429, 96, 96) },
+            { "1400x1050", new Rectangle(954, 576, 109, 109) },
+            { "1600x900", new Rectangle(1063, 503, 113, 113) },
+            { "1600x1024", new Rectangle(1076, 568, 118, 118) },
+            { "1920x1080", new Rectangle(1275, 604, 135, 135) }
         };
 
         /// <summary>
@@ -401,7 +401,7 @@ namespace Magispec
                 checkBoxWoodcutter
             };
 
-            foreach (var checkbox in checkboxes)
+            foreach (var checkbox in this.checkboxes)
             {
                 checkbox.ForeColor = TraitColors[(Trait)checkbox.Tag];
                 checkbox.CheckedChanged += (checkedSender, checkedEventArgs) =>
@@ -445,10 +445,9 @@ namespace Magispec
             Trait desiredTrait2 = Trait.Unknown;
             this.GetDesiredTraits(ref desiredTrait1, ref desiredTrait2);
 
-            Rectangle windowRect = new Rectangle();
-            Win32.GetWindowRect(p.MainWindowHandle, ref windowRect);
-            Rectangle rect = StatsButtonPosition[this.ResolutionString];
-            this.MoveMouse(windowRect, rect);
+            Rectangle windowRect = this.GetWindowRect(p.MainWindowHandle);
+            Rectangle statsButtonRect = this.GetStatsButtonPosition(windowRect);
+            this.MoveMouse(windowRect, statsButtonRect);
 
             Func<bool> stopCondition = new Func<bool>(() =>
             {
@@ -459,8 +458,8 @@ namespace Magispec
 
                 Trait trait1 = Trait.Unknown;
                 Trait trait2 = Trait.Unknown;
-                Color background1 = GetIconBackgroundColor(Trait1IconPosition[ResolutionString], windowRect);
-                Color background2 = GetIconBackgroundColor(Trait2IconPosition[ResolutionString], windowRect);
+                Color background1 = GetIconBackgroundColor(GetTrait1IconPosition(windowRect), windowRect);
+                Color background2 = GetIconBackgroundColor(GetTrait2IconPosition(windowRect), windowRect);
                 foreach (var kvp in TraitColors)
                 {
                     double similarity = 100;
@@ -495,7 +494,111 @@ namespace Magispec
                        ((desiredTrait2 == Trait.Unknown || trait1 == desiredTrait2) && (desiredTrait1 == Trait.Unknown || trait2 == desiredTrait1));
             });
 
-            this.ClickMouse(Cursor.Position.X, Cursor.Position.Y, stopCondition: stopCondition);
+            int x = windowRect.Left + statsButtonRect.Left + ((statsButtonRect.Right - statsButtonRect.Left) / 2);
+            int y = windowRect.Top + statsButtonRect.Top + ((statsButtonRect.Bottom - statsButtonRect.Top) / 2);
+            this.ClickMouse(x, y, stopCondition: stopCondition);
+        }
+
+        /// <summary>
+        /// Gets the Magicite window
+        /// </summary>
+        /// <param name="handle">Magicite handle</param>
+        /// <param name="takeDebugScreenshot">True to take a screenshot of the window</param>
+        /// <returns>Position of window</returns>
+        private Rectangle GetWindowRect(IntPtr handle, bool takeDebugScreenshot = false)
+        {
+            Rectangle windowRect = Rectangle.Empty;
+            Rectangle clientRect = Rectangle.Empty;
+            Win32.GetWindowRect(handle, ref windowRect);
+            Win32.GetClientRect(handle, ref clientRect);
+
+            int borderWidth = (windowRect.Width - windowRect.Left - clientRect.Width) / 2;
+            int titlebarHeight = windowRect.Height - windowRect.Top - clientRect.Height - borderWidth;
+
+            // Shift the rectangle to include only the client piece
+            windowRect = new Rectangle(
+                x: windowRect.Left + borderWidth,
+                y: windowRect.Top + titlebarHeight,
+                width: windowRect.Width - borderWidth,
+                height: windowRect.Height - borderWidth);
+
+            if (takeDebugScreenshot)
+            {
+                Bitmap bitmap = new Bitmap(windowRect.Width - windowRect.Left, windowRect.Height - windowRect.Top);
+                using (Graphics g = Graphics.FromImage(bitmap))
+                {
+                    g.CopyFromScreen(windowRect.Left, windowRect.Top, 0, 0, windowRect.Size);
+                }
+
+                bitmap.Save(this.ResolutionString + ".bmp", System.Drawing.Imaging.ImageFormat.Bmp);
+            }
+
+            return windowRect;
+        }
+
+        /// <summary>
+        /// Gets the position of the "Stats" button
+        /// </summary>
+        /// <param name="windowRect">Magicite window</param>
+        /// <returns>Position of the "Stats" button</returns>
+        private Rectangle GetStatsButtonPosition(Rectangle windowRect)
+        {
+            Rectangle statsButtonRect = StatsButtonPosition[this.ResolutionString];
+            if (this.IsFullScreen)
+            {
+                statsButtonRect = this.FullScreenTranslate(windowRect, statsButtonRect);
+            }
+
+            return statsButtonRect;
+        }
+
+        /// <summary>
+        /// Gets the position of the first trait
+        /// </summary>
+        /// <param name="windowRect">Magicite window</param>
+        /// <returns>Position of the first trait</returns>
+        private Rectangle GetTrait1IconPosition(Rectangle windowRect)
+        {
+            Rectangle trait1IconRect = Trait1IconPosition[this.ResolutionString];
+            if (this.IsFullScreen)
+            {
+                trait1IconRect = this.FullScreenTranslate(windowRect, trait1IconRect);
+            }
+
+            return trait1IconRect;
+        }
+
+        /// <summary>
+        /// Gets the position of the second trait
+        /// </summary>
+        /// <param name="windowRect">Magicite window</param>
+        /// <returns>Position of the second trait</returns>
+        private Rectangle GetTrait2IconPosition(Rectangle windowRect)
+        {
+            Rectangle trait2IconRect = Trait2IconPosition[this.ResolutionString];
+            if (this.IsFullScreen)
+            {
+                trait2IconRect = this.FullScreenTranslate(windowRect, trait2IconRect);
+            }
+
+            return trait2IconRect;
+        }
+
+        /// <summary>
+        /// Translates the position of the element if in full-screen mode
+        /// </summary>
+        /// <param name="windowRect">Magicite window</param>
+        /// <param name="rect">Element to translate</param>
+        /// <returns>Translated position of element</returns>
+        private Rectangle FullScreenTranslate(Rectangle windowRect, Rectangle rect)
+        {
+            double widthChange = (double)windowRect.Width / this.ResolutionWidth;
+            double heightChange = (double)windowRect.Height / this.ResolutionHeight;
+            return new Rectangle(
+                     x: (int)Math.Round(rect.Left * widthChange),
+                     y: (int)Math.Round(rect.Top * heightChange),
+                 width: (int)Math.Round(rect.Width * widthChange),
+                height: (int)Math.Round(rect.Height * heightChange));
         }
 
         /// <summary>
@@ -523,7 +626,7 @@ namespace Magispec
         /// <param name="desiredTrait2">Second desired trait</param>
         private void GetDesiredTraits(ref Trait desiredTrait1, ref Trait desiredTrait2)
         {
-            foreach (var checkbox in checkboxes)
+            foreach (var checkbox in this.checkboxes)
             {
                 if (checkbox.Checked)
                 {
